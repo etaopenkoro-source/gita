@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>এসপি বুক রিডিং</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&family=Noto+Serif+Bengali:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8EC;--panel:#FFFFFF;--ink:#2B1B17;--mute:#7A6658;--line:#F0DFC8;--accent:#E4572E;--accent2:#7B2FF7;--soft:#FFF0D2;--ok:#1E8A5B;--err:#B3261E;
+ --c-dev:#E4572E;--c-vt:#0E9AA7;--c-syn:#5B5BD6;--c-tr:#D98E04;--c-pu:#C2306B;
+ --blob1:#FFD9A8;--blob2:#FFC6E0;--blob3:#C4E8FF;--head:linear-gradient(100deg,#E4572E,#C2306B 48%,#5B2EC9)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F0B1E;--panel:#1A1433;--ink:#F4EEFF;--mute:#B2A6CC;--line:#35295C;--accent:#FF8A5C;--accent2:#A98BFF;--soft:#2A1F4D;--ok:#6EE0A8;--err:#FF9A92;
+ --c-dev:#FF8A5C;--c-vt:#4FD6E0;--c-syn:#9A9BFF;--c-tr:#FFC247;--c-pu:#FF7DB1;--blob1:#4A2A12;--blob2:#4A1740;--blob3:#12305A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F0B1E;--panel:#1A1433;--ink:#F4EEFF;--mute:#B2A6CC;--line:#35295C;--accent:#FF8A5C;--accent2:#A98BFF;--soft:#2A1F4D;--ok:#6EE0A8;--err:#FF9A92;
+ --c-dev:#FF8A5C;--c-vt:#4FD6E0;--c-syn:#9A9BFF;--c-tr:#FFC247;--c-pu:#FF7DB1;--blob1:#4A2A12;--blob2:#4A1740;--blob3:#12305A;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:'Hind Siliguri',system-ui,sans-serif;line-height:1.7;
+ background:radial-gradient(circle at 8% 0,var(--blob1) 0,transparent 42%),radial-gradient(circle at 96% 8%,var(--blob2) 0,transparent 38%),radial-gradient(circle at 50% 100%,var(--blob3) 0,transparent 45%),var(--bg);background-attachment:fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.hide{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+/* header */
+header{background:var(--head);color:#fff;display:flex;align-items:center;gap:8px 16px;padding:12px 20px;flex-wrap:wrap;box-shadow:0 6px 24px -10px rgba(194,48,107,.7);position:sticky;top:0;z-index:6}
+header b{font-family:'Noto Serif Bengali',serif;font-size:1.3rem;font-weight:800;cursor:pointer}
+header nav{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+header nav button,.tbtn{background:transparent;border:0;color:#fff;border-radius:999px;padding:5px 14px;cursor:pointer;font-weight:500}
+header nav button:hover,header nav button.on{background:#ffffff33}
+.tbtn{background:#ffffff26;border:1px solid #ffffff77}
+/* hero */
+.hero2{display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:center;padding:44px 0 22px}
+.chip{display:inline-block;background:var(--soft);color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:3px 14px;font-weight:600;font-size:.9rem}
+.hero2 h1{font-family:'Noto Serif Bengali',serif;font-weight:800;font-size:clamp(1.9rem,5vw,3.1rem);line-height:1.3;margin:12px 0 10px;background:linear-gradient(95deg,var(--accent),var(--c-pu),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero2 p{color:var(--mute);max-width:58ch;margin:0 0 18px;font-size:1.05rem}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 24px;font-weight:700;cursor:pointer;background:var(--head);color:#fff;box-shadow:0 10px 18px -10px var(--accent);transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.alt{background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.pic{margin:0;display:grid;place-items:center}
+.frame{width:min(340px,80vw);aspect-ratio:1;border-radius:50%;padding:8px;background:conic-gradient(from 20deg,#E4572E,#F2A900,#C2306B,#5B2EC9,#0E9AA7,#E4572E);box-shadow:0 24px 44px -22px var(--c-pu)}
+.frame>div{width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--panel);display:grid;place-items:center;text-align:center}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.medal{font-family:'Noto Serif Bengali',serif;font-weight:800;font-size:2rem;line-height:1.3;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;padding:20px}
+.medal small{display:block;font:500 .8rem 'Hind Siliguri',sans-serif;color:var(--mute);-webkit-text-fill-color:var(--mute);margin-top:8px}
+.pic figcaption{margin-top:12px;text-align:center;color:var(--mute);font-size:.92rem}
+.pic figcaption b{display:block;color:var(--ink);font-family:'Noto Serif Bengali',serif}
+/* quotes */
+.quote{position:relative;margin:26px 0;border-radius:22px;padding:34px 28px 40px;color:#fff;background:linear-gradient(120deg,#C2306B,#5B2EC9 60%,#0E9AA7);box-shadow:0 20px 40px -26px #5B2EC9;overflow:hidden}
+.quote::before{content:"“";position:absolute;left:18px;top:-30px;font:800 9rem 'Noto Serif Bengali',serif;opacity:.16}
+.q{display:none;text-align:center;max-width:780px;margin:0 auto}
+.q.on{display:block;animation:in .6s}
+.q p{font-family:'Noto Serif Bengali',serif;font-size:clamp(1.15rem,2.8vw,1.6rem);line-height:1.8;margin:0 0 10px}
+.q cite{font-style:normal;opacity:.9;font-size:.95rem}
+.dots{position:absolute;left:0;right:0;bottom:12px;display:flex;gap:8px;justify-content:center}
+.dots button{width:10px;height:10px;border-radius:50%;border:0;background:#ffffff66;cursor:pointer;padding:0}
+.dots button.on{background:#fff;transform:scale(1.25)}
+/* sections */
+h2.sh{font-family:'Noto Serif Bengali',serif;font-size:1.7rem;margin:34px 0 6px}
+.sub{color:var(--mute);margin:0 0 16px}
+.about{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--h,var(--accent));border-radius:16px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-family:'Noto Serif Bengali',serif;font-size:1.15rem}
+.card p{margin:0;color:var(--mute)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.bk{display:flex;flex-direction:column;border-radius:6px 18px 18px 6px;color:#fff;padding:20px 18px 18px 22px;cursor:pointer;text-align:left;border:0;min-height:230px;
+ background:linear-gradient(90deg,rgba(0,0,0,.28) 0 7px,rgba(255,255,255,.18) 7px 10px,transparent 10px),linear-gradient(155deg,var(--c),var(--c2));box-shadow:0 14px 26px -14px var(--c);transition:transform .25s}
+.bk:hover{transform:translateY(-6px)}
+.bk b{font-family:'Noto Serif Bengali',serif;font-size:1.3rem;line-height:1.35}
+.bk small{opacity:.92;margin:2px 0 10px}
+.bk span{font-size:.93rem;opacity:.95;flex:1}
+.bk i{align-self:flex-start;margin-top:12px;font-style:normal;font-weight:600;font-size:.85rem;background:#ffffff33;border-radius:999px;padding:3px 14px}
+.cta{margin:34px 0 10px;border-radius:20px;padding:26px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px dashed var(--accent2)}
+.cta div{flex:1;min-width:220px}.cta h3{margin:0;font-family:'Noto Serif Bengali',serif}.cta p{margin:2px 0 0;color:var(--mute)}
+footer{color:var(--mute);text-align:center;font-size:.88rem;padding:26px 18px 50px}
+/* search */
+.pg{padding:26px 0 0}
+.pg h2{font-family:'Noto Serif Bengali',serif;font-size:1.8rem;margin:0 0 4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.chipb{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 16px;cursor:pointer;font-weight:500}
+.chipb.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--c),var(--c2))}
+.form{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:end;flex-wrap:wrap;margin:0 0 24px;box-shadow:0 10px 24px -18px var(--accent)}
+.f{display:flex;flex-direction:column;gap:4px;font-size:.9rem;color:var(--mute)}
+.f input,.f select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:110px;color:var(--ink)}
+.f input[type=number],.f input.v{width:120px}
+.chk{display:flex;gap:8px;align-items:center;font-size:.92rem;color:var(--mute);padding-bottom:10px}
+.go{background:var(--head);color:#fff;border:0;border-radius:10px;padding:11px 24px;font-weight:700;cursor:pointer;transition:transform .2s;box-shadow:0 8px 16px -8px var(--accent)}
+.go:hover{transform:translateY(-2px)}.go:disabled{opacity:.6;cursor:wait}
+.msg{padding:14px 18px;border-radius:12px;margin-bottom:20px;display:none}
+.msg.err{display:block;background:var(--soft);color:var(--err);border:1px solid var(--err)}
+.load{display:none;align-items:center;gap:12px;padding:20px;color:var(--mute)}
+.load.on{display:flex}
+.spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+#out{display:none;padding-bottom:60px}
+#out.on{display:block;animation:in .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.top h2{font-family:'Noto Serif Bengali',serif;font-size:2rem;margin:0;flex:1}
+.top a{color:var(--accent)}
+.sec{--sc:var(--accent);background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--sc);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.sec>h3{margin:0;padding:9px 18px;background:color-mix(in srgb,var(--sc) 13%,var(--panel));color:var(--sc);font-size:.98rem;border-bottom:1px solid var(--line)}
+.s-dev{--sc:var(--c-dev)}.s-vt{--sc:var(--c-vt)}.s-syn{--sc:var(--c-syn)}.s-tr{--sc:var(--c-tr)}.s-pu{--sc:var(--c-pu)}
+.cols{display:grid;grid-template-columns:1fr 1fr}
+.col{padding:14px 18px;min-width:0}.col+.col{border-left:1px solid var(--line)}
+.col h4{margin:0 0 6px;font-size:.85rem;color:var(--mute);display:flex;justify-content:space-between;align-items:center}
+.txt{white-space:pre-wrap;font-family:'Noto Serif Bengali',Georgia,serif;font-size:1.05rem;line-height:1.95;overflow-wrap:anywhere}
+.txt.en,.txt.vt{font-family:Georgia,'Times New Roman',serif}
+.txt.dev{font-weight:600;font-size:1.25rem}
+.cp{background:none;border:1px solid var(--line);border-radius:8px;padding:2px 10px;cursor:pointer;font-size:.8rem;color:var(--mute)}
+.cp:hover{border-color:var(--accent);color:var(--accent)}
+.cp.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.nav2{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.nav2 button{background:var(--accent2);color:#fff;border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
+.nav2 button:disabled{opacity:.4;cursor:not-allowed}
+.nav2 .all{background:var(--head);margin-left:auto;color:#fff}
+.note{color:var(--mute);font-size:.88rem;margin-top:14px}
+/* TOC */
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;padding:6px 0 60px}
+.chap{--h:0;display:flex;gap:14px;align-items:center;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.chap::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:hsl(var(--h) 75% 55%)}
+.chap:hover{transform:translateY(-4px);box-shadow:0 14px 24px -14px hsl(var(--h) 75% 45%)}
+.chap .no{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;font-family:'Noto Serif Bengali',serif;font-weight:800;font-size:1.3rem;background:linear-gradient(135deg,hsl(var(--h) 80% 55%),hsl(calc(var(--h) + 40) 75% 42%))}
+.chap b{display:block;font-family:'Noto Serif Bengali',serif;font-size:1.05rem;line-height:1.4}
+.chap small{display:block;color:var(--mute);font-size:.82rem}
+.soon{background:var(--panel);border:1px dashed var(--accent2);border-radius:14px;padding:20px;color:var(--mute);margin:16px 0 30px}
+.soon .btn{margin-top:12px}
+.back{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 16px;cursor:pointer}
+/* Reader */
+.bar{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:0 6px 18px -14px rgba(0,0,0,.5)}
+.bar .in{max-width:1100px;margin:0 auto;padding:10px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar button{background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:.9rem}
+.bar button:hover{border-color:var(--accent)}
+.bar .ttl{flex:1;font-family:'Noto Serif Bengali',serif;font-weight:800;min-width:160px}
+.bar .on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.prog{height:5px;background:var(--line)}
+.prog>div{height:100%;width:0;background:var(--head);transition:width .3s}
+.rhero{margin:26px 0 20px;padding:26px 24px;border-radius:20px;color:#fff;background:linear-gradient(120deg,var(--rc1),var(--rc2));box-shadow:0 16px 30px -18px var(--rc1)}
+.rhero small{opacity:.9}
+.rhero h2{font-family:'Noto Serif Bengali',serif;font-size:clamp(1.5rem,4vw,2.3rem);margin:2px 0 0;line-height:1.35}
+.rhero p{margin:4px 0 0;opacity:.92}
+.verse{background:var(--panel);border:1px solid var(--line);border-radius:18px;margin-bottom:22px;overflow:hidden;box-shadow:0 14px 28px -24px var(--accent2)}
+.vh{display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 16%,var(--panel)),color-mix(in srgb,var(--accent2) 14%,var(--panel)))}
+.vh .n{background:var(--head);color:#fff;border-radius:999px;padding:2px 16px;font-family:'Noto Serif Bengali',serif;font-weight:800}
+.vh .sp{flex:1}
+.vb{padding:6px 14px 14px}
+.vb .sec{margin:12px 0 0}
+.vb .sec .txt{padding:12px 16px}
+.vb .txt:not(.dev):not(.en):not(.vt){font-size:var(--rfs,1.05rem)}
+.vb .s-dev .txt,.vb .s-vt .txt{text-align:center}
+.vb .s-vt .txt{font-style:italic}
+.vb .s-tr{border-width:2px;border-left-width:6px}
+.vb .s-tr .txt.main{font-size:calc(var(--rfs,1.05rem)*1.12);font-weight:600}
+.vb .en{display:none;border-top:1px dashed var(--line);color:var(--mute);font-size:.95rem}
+.showEn .vb .en{display:block}
+.showEn .vb .s-vt .en,.showEn .vb .s-dev .en{display:block}
+.spk{padding:10px 16px 0;text-align:center;font-weight:700;color:var(--c-dev);font-family:'Noto Serif Bengali',serif}
+.vw{padding:22px;color:var(--mute);display:flex;gap:12px;align-items:center}
+.ve{padding:16px;background:var(--soft);color:var(--err);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ve button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:5px 14px;cursor:pointer}
+.mynote{margin:12px 0 0}
+.mynote summary{cursor:pointer;color:var(--c-pu);font-weight:600}
+.mynote textarea{width:100%;min-height:90px;margin-top:8px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);font-family:'Noto Serif Bengali',serif;resize:vertical}
+.rfoot{display:flex;gap:10px;flex-wrap:wrap;padding:10px 0 70px}
+.rfoot button{background:var(--head);color:#fff;border:0;border-radius:12px;padding:11px 20px;cursor:pointer;font-weight:600}
+.rfoot button.alt{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+@media (max-width:820px){.hero2{grid-template-columns:1fr;padding-top:28px}.pic{order:-1}.cols{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.top h2{font-size:1.6rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div id="site">
+<header>
+ <b data-go="home">এসপি বুক রিডিং</b>
+ <nav>
+  <button data-go="home" id="nHome">হোম</button>
+  <button data-go="shelf" id="nShelf">গ্রন্থসমূহ</button>
+  <button data-go="search" id="nSearch">🔍 শ্লোক খুঁজুন</button>
+ </nav>
+ <button class="tbtn th">🌓 থিম</button>
+</header>
+
+<!-- ======== হোম ======== -->
+<main id="v-home">
+<div class="wrap">
+ <section class="hero2">
+  <div>
+   <span class="chip">হরে কৃষ্ণ</span>
+   <h1>শ্রীল প্রভুপাদের গ্রন্থ, পড়ুন নিজের ভাষায়</h1>
+   <p>ইসকনের প্রতিষ্ঠাতা-আচার্য শ্রীল প্রভুপাদের গ্রন্থসমূহ অধ্যায় ধরে ধরে পড়ুন। শ্লোক, শব্দার্থ, অনুবাদ ও তাৎপর্য সবই বাংলায়। পড়তে পড়তে নিজের নোটও লিখে রাখতে পারবেন।</p>
+   <div class="btns"><button class="btn" data-go="shelf">📖 পড়া শুরু করুন</button><button class="btn alt" data-go="search">🔍 শ্লোক খুঁজুন</button></div>
+  </div>
+  <figure class="pic">
+   <div class="frame"><div id="pimg"></div></div>
+   <figcaption><b>শ্রীল এ. সি. ভক্তিবেদান্ত স্বামী প্রভুপাদ</b>ইসকনের প্রতিষ্ঠাতা-আচার্য (১৮৯৬–১৯৭৭)</figcaption>
+  </figure>
+ </section>
+
+ <section class="quote" aria-label="উক্তি">
+  <div id="qs"></div>
+  <div class="dots" id="qd"></div>
+ </section>
+
+ <h2 class="sh">পরিচিতি</h2>
+ <div class="about">
+  <div class="card" style="--h:#E4572E"><h3>ইসকন</h3><p>আন্তর্জাতিক কৃষ্ণভাবনামৃত সংঘ (ISKCON) ১৯৬৬ সালে নিউ ইয়র্কে প্রতিষ্ঠিত হয়। এর মূল শিক্ষা ভগবদ্গীতা ও শ্রীমদ্ভাগবতের ভিত্তিতে কৃষ্ণভক্তি, হরিনাম সংকীর্তন ও ভক্তিমূলক জীবনযাপন।</p></div>
+  <div class="card" style="--h:#C2306B"><h3>শ্রীল প্রভুপাদ</h3><p>১৮৯৬ সালে কলকাতায় জন্ম। ১৯৬৫ সালে পশ্চিমে যাত্রা করে তিনি ইসকন প্রতিষ্ঠা করেন এবং সংস্কৃত শাস্ত্রের ভাষ্য ও অনুবাদ করেন। ১৯৭৭ সালে বৃন্দাবনে অপ্রকট হন।</p></div>
+  <div class="card" style="--h:#0E9AA7"><h3>প্রভুপাদের গ্রন্থ</h3><p>ভগবদ্গীতা যথাযথ, শ্রীমদ্ভাগবত, শ্রীচৈতন্য চরিতামৃত সহ অনেক গ্রন্থ ভক্তিবেদান্ত বুক ট্রাস্ট (BBT) প্রকাশ করেছে। গ্রন্থগুলোতে মূল সংস্কৃত শ্লোক, শব্দার্থ, অনুবাদ ও তাৎপর্য থাকে।</p></div>
+ </div>
+
+ <h2 class="sh" id="shelf">গ্রন্থসমূহ</h2>
+ <p class="sub">যেকোনো গ্রন্থে ক্লিক করুন।</p>
+ <div class="shelf" id="books"></div>
+
+ <div class="cta">
+  <div><h3>নির্দিষ্ট শ্লোক খুঁজছেন?</h3><p>বই, অধ্যায় ও শ্লোক নম্বর দিয়ে সরাসরি খুঁজে বাংলা অনুবাদ পান।</p></div>
+  <button class="btn" data-go="search">🔍 শ্লোক খুঁজুন</button>
+ </div>
+</div>
+</main>
+
+<!-- ======== গ্রন্থ: সূচিপত্র ======== -->
+<main id="v-book" class="hide"><div class="wrap pg">
+ <button class="back" data-go="shelf">← সকল গ্রন্থ</button>
+ <div id="toc"></div>
+</div></main>
+
+<!-- ======== খুঁজুন ======== -->
+<main id="v-search" class="hide"><div class="wrap pg">
+ <h2>শ্লোক খুঁজুন</h2>
+ <p class="sub">বই বেছে অধ্যায় ও শ্লোক নম্বর দিন।</p>
+ <div class="chips" id="chips"></div>
+ <div class="form">
+  <label class="f" id="fPart">স্কন্ধ / লীলা<select id="part"></select></label>
+  <label class="f" id="fCh">অধ্যায়<input id="ch" type="number" min="1" value="1"></label>
+  <label class="f">শ্লোক<input id="vs" class="v" type="text" value="1" placeholder="যেমন 1 বা 16-18"></label>
+  <label class="chk"><input type="checkbox" id="syn"> শব্দার্থও অনুবাদ করুন</label>
+  <button class="go" id="go">অনুবাদ করুন</button>
+ </div>
+ <div class="msg" id="msg" role="alert"></div>
+ <div class="load" id="load"><div class="spin"></div><span>Vedabase থেকে আনা ও অনুবাদ হচ্ছে, একটু অপেক্ষা করুন...</span></div>
+ <div id="out"></div>
+</div></main>
+
+<footer>অনুবাদ যন্ত্রের করা। শাস্ত্রীয় শব্দের অর্থ নিজের ছাপা গ্রন্থের সঙ্গে মিলিয়ে নিন। মূল লেখা: vedabase.io</footer>
+</div>
+
+<!-- ======== অধ্যায় পড়ার পাতা ======== -->
+<div id="reader" class="hide">
+ <div class="bar">
+  <div class="in">
+   <button id="rBack">← সূচিপত্র</button>
+   <span class="ttl" id="rTtl"></span>
+   <button id="rEn" title="ইংরেজি মূল লেখা দেখান বা লুকান">English</button>
+   <button id="rMinus" aria-label="অক্ষর ছোট">A−</button>
+   <button id="rPlus" aria-label="অক্ষর বড়">A+</button>
+   <button id="rRe" title="Vedabase থেকে নতুন করে আনুন">↻ নতুন করে আনুন</button>
+   <button class="th">🌓</button>
+  </div>
+  <div class="prog"><div id="rProg"></div></div>
+ </div>
+ <div class="wrap">
+  <div class="rhero" id="rHero"></div>
+  <div id="rVerses"></div>
+  <div class="rfoot" id="rFoot"></div>
+ </div>
+</div>
+
+<script>
+/* ===== সেটিং: প্রভুপাদের ছবির লিংক এখানে বসান (খালি রাখলে সাজানো ফ্রেম দেখাবে) ===== */
+const PRABHUPADA_IMG='';
+
+/* ===== সেটিং: Apps Script-এর Web app URL (…/exec) এখানে বসান। GitHub Pages-এ পাতা চালালে এটি লাগবে ===== */
+const API_URL='https://script.google.com/macros/s/AKfycbxX9cvguz4PypExNhZ75X13uwYVjtaWe8rO5BezLZ8SOPneGOUmIc8RoP2M2NiMr0JXig/exec';
+
+/* ---------- তথ্য ---------- */
+const BK={
+bg:{t:'ভগবদ্গীতা যথাযথ',s:'Bhagavad-gītā As It Is',c:'#10A37F',c2:'#0A5C8C',read:1,d:'কুরুক্ষেত্রের যুদ্ধক্ষেত্রে শ্রীকৃষ্ণ ও অর্জুনের কথোপকথন। ১৮ অধ্যায়, ৭০০ শ্লোক।'},
+sb:{t:'শ্রীমদ্ভাগবত',s:'Śrīmad-Bhāgavatam',c:'#F59E0B',c2:'#C2410C',d:'১২ স্কন্ধে ভগবান ও তাঁর ভক্তদের লীলাকথা, ভক্তিতত্ত্বের পরম গ্রন্থ।',parts:[...Array(12)].map((_,i)=>[String(i+1),'স্কন্ধ '+(i+1)])},
+cc:{t:'শ্রীচৈতন্য চরিতামৃত',s:'Caitanya-caritāmṛta',c:'#D946A8',c2:'#7E22CE',d:'কৃষ্ণদাস কবিরাজ গোস্বামী রচিত শ্রীচৈতন্য মহাপ্রভুর জীবন ও শিক্ষা। আদি, মধ্য ও অন্ত্য লীলা।',parts:[['adi','আদি লীলা'],['madhya','মধ্য লীলা'],['antya','অন্ত্য লীলা']]},
+noi:{t:'উপদেশামৃত',s:'Nectar of Instruction',c:'#3B82F6',c2:'#4338CA',d:'শ্রীল রূপ গোস্বামী রচিত ১১টি শ্লোকে ভক্তিজীবনের মূল উপদেশ।',nc:1},
+iso:{t:'শ্রীঈশোপনিষদ',s:'Śrī Īśopaniṣad',c:'#EF4444',c2:'#9F1239',d:'১৮টি মন্ত্রে পরমেশ্বর ভগবানের পরিচয় ও জীবের কর্তব্য।',nc:1}};
+const BG_COUNT=[46,72,43,42,29,47,30,28,34,42,55,20,35,27,20,24,28,78];
+const BG_CH=['অর্জুন-বিষাদ-যোগ','সাংখ্য-যোগ','কর্মযোগ','জ্ঞানযোগ','কর্মসন্ন্যাস-যোগ','ধ্যানযোগ','বিজ্ঞান-যোগ','অক্ষরব্রহ্ম-যোগ','রাজগুহ্য-যোগ','বিভূতি-যোগ','বিশ্বরূপ-দর্শন-যোগ','ভক্তিযোগ','প্রকৃতি-পুরুষ-বিবেকযোগ','গুণত্রয়-বিভাগ-যোগ','পুরুষোত্তম-যোগ','দৈবাসুর-সম্পদ-বিভাগযোগ','শ্রদ্ধাত্রয়-বিভাগ-যোগ','মোক্ষযোগ'];
+const SEC=[['dev','সংস্কৃত শ্লোক (বাংলা লিপি)','Devanagari'],['vt','রোমান লিপ্যন্তর','Verse text'],['syn','শব্দার্থ','Synonyms'],['tr','অনুবাদ','Translation'],['pu','তাৎপর্য','Purport']];
+const QUOTES=[
+['হরে কৃষ্ণ কীর্তন করুন, আপনার জীবন পরম সুন্দর হয়ে উঠবে।','শ্রীল প্রভুপাদ'],
+['সর্বপ্রকার ধর্ম পরিত্যাগ করে কেবল আমার শরণাগত হও। আমি তোমাকে সমস্ত পাপ থেকে মুক্ত করব। তুমি ভয় করো না।','ভগবদ্গীতা ১৮.৬৬'],
+['সর্বদা আমার চিন্তায় মগ্ন হও, আমার ভক্ত হও, আমাকে প্রণাম করো এবং আমার পূজা করো। এইভাবে সম্পূর্ণরূপে আমাতে মগ্ন হলে তুমি অবশ্যই আমার কাছে আসবে।','ভগবদ্গীতা ৯.৩৪'],
+['মানবজাতির পরম ধর্ম সেটিই, যার দ্বারা অধোক্ষজ ভগবানের প্রতি অহৈতুকী ও অপ্রতিহত ভক্তি লাভ করা যায়।','শ্রীমদ্ভাগবত ১.২.৬']];
+
+/* ---------- সাহায্যকারী ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const bnum=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const HAS_GS=typeof google!=='undefined'&&google.script&&google.script.run;
+async function api(fn,a){
+ if(!API_URL)throw new Error('API_URL বসানো হয়নি।');
+ let r;
+ if(fn==='saveChapter')r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:fn,args:a})});
+ else r=await fetch(API_URL+'?fn='+encodeURIComponent(fn)+'&args='+encodeURIComponent(JSON.stringify(a)));
+ let j;try{j=await r.json()}catch(e){throw new Error('সার্ভার থেকে উত্তর পাওয়া যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।')}
+ if(!j.ok)throw new Error(j.error||'কিছু একটা সমস্যা হয়েছে।');
+ return j.data;
+}
+const gs=(fn,...a)=>HAS_GS?new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[fn](...a)):api(fn,a);
+const errMsg=m=>m&&m.message?m.message.replace(/^Error:\s*/,''):'কিছু একটা সমস্যা হয়েছে, আবার চেষ্টা করুন।';
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* দেবনাগরী → বাংলা লিপি (ইউনিকোডে দুই লিপির বিন্যাস সমান্তরাল, ব্যতিক্রমগুলো আলাদা) */
+const BN_OK=/[ঁ-ঃঅ-ঌএঐও-নপ-রলশ-হ়-ঽা-ৄেৈো-্ড়ঢ়য়-ৣ০-৯]/;
+function d2b(s){
+ return String(s||'').replace(/[ऀ-ॿ]/g,ch=>{
+  const c=ch.charCodeAt(0);
+  if(c===0x0964||c===0x0965)return ch;
+  if(c===0x0935)return'ব';
+  if(c===0x0933)return'ল';
+  if(c===0x0950)return'ওঁ';
+  const m=String.fromCharCode(c+0x80);
+  return BN_OK.test(m)?m:ch;
+ }).replace(/ত্স/g,'ৎস').replace(/ত্(?![\u0980-\u09FF])/g,'ৎ');
+}
+{const t=store.get('th');if(t)document.documentElement.dataset.theme=t}
+document.querySelectorAll('.th').forEach(b=>b.onclick=()=>{const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark';store.set('th',r.dataset.theme)});
+
+/* ---------- পাতা বদল ---------- */
+let book='bg',cur='home';
+function go(v){
+ showReader(false);
+ if(v==='shelf'){v='home'}
+ cur=v;
+ ['home','book','search'].forEach(x=>$('#v-'+x).classList.toggle('hide',x!==v));
+ $('#nHome').classList.toggle('on',v==='home');$('#nSearch').classList.toggle('on',v==='search');
+ scrollTo(0,0);
+}
+function goShelf(){go('home');setTimeout(()=>$('#shelf').scrollIntoView({behavior:'smooth'}),30)}
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(!g)return;
+ const v=g.dataset.go;if(v==='shelf')goShelf();else go(v);
+});
+
+/* ---------- ছবি ---------- */
+$('#pimg').innerHTML=PRABHUPADA_IMG?`<img src="${esc(PRABHUPADA_IMG)}" alt="শ্রীল প্রভুপাদ" onerror="this.parentNode.innerHTML='<div class=medal>হরে কৃষ্ণ</div>'">`:`<div class="medal">হরে কৃষ্ণ<small>শ্রীল প্রভুপাদ</small></div>`;
+
+/* ---------- উক্তি ---------- */
+$('#qs').innerHTML=QUOTES.map((q,i)=>`<div class="q${i?'':' on'}"><p>${esc(q[0])}</p><cite>— ${esc(q[1])}</cite></div>`).join('');
+$('#qd').innerHTML=QUOTES.map((_,i)=>`<button class="${i?'':'on'}" aria-label="উক্তি ${bnum(i+1)}" data-q="${i}"></button>`).join('');
+let qi=0,qt=null;
+function showQ(i){qi=i;document.querySelectorAll('.q').forEach((x,k)=>x.classList.toggle('on',k===i));document.querySelectorAll('#qd button').forEach((x,k)=>x.classList.toggle('on',k===i))}
+function qStart(){clearInterval(qt);if(!matchMedia('(prefers-reduced-motion:reduce)').matches)qt=setInterval(()=>showQ((qi+1)%QUOTES.length),8000)}
+$('#qd').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(b){showQ(+b.dataset.q);qStart()}});
+qStart();
+
+/* ---------- গ্রন্থ তাক ---------- */
+$('#books').innerHTML=Object.keys(BK).map(k=>`<button class="bk" data-k="${k}" style="--c:${BK[k].c};--c2:${BK[k].c2}"><b>${BK[k].t}</b><small>${BK[k].s}</small><span>${BK[k].d}</span><i>${BK[k].read?'পড়ুন →':'শ্লোক খুঁজুন →'}</i></button>`).join('');
+$('#books').addEventListener('click',e=>{const b=e.target.closest('.bk');if(b)openBook(b.dataset.k)});
+function openBook(k){
+ book=k;const b=BK[k];
+ if(!b.read){pick(k);go('search');return}
+ $('#toc').innerHTML=`<h2>${b.t}</h2><p class="sub">অধ্যায় বেছে নিন। প্রথমবার খুললে Vedabase থেকে এনে বাংলায় অনুবাদ করতে কিছুটা সময় লাগে। এরপর সংরক্ষিত থাকায় সঙ্গে সঙ্গে খোলে।</p>
+ <div class="toc">${BG_CH.map((c,i)=>`<button class="chap" data-n="${i+1}" style="--h:${(i*20+8)%360}"><span class="no">${bnum(i+1)}</span><span><b>${c}</b><small>অধ্যায় ${bnum(i+1)} · ${bnum(BG_COUNT[i])} শ্লোক</small></span></button>`).join('')}</div>`;
+ go('book');
+}
+$('#toc').addEventListener('click',e=>{const c=e.target.closest('.chap');if(c)openChapter(+c.dataset.n)});
+
+/* ---------- অধ্যায় পড়া ---------- */
+let R={ch:0,items:[],token:0,fs:1.05};
+const hueOf=n=>(n*20+8)%360;
+function showReader(on){$('#site').classList.toggle('hide',on);$('#reader').classList.toggle('hide',!on);if(on)scrollTo(0,0)}
+$('#rBack').onclick=()=>{R.token++;go('book')};
+$('#rEn').onclick=function(){const on=$('#reader').classList.toggle('showEn');this.classList.toggle('on',on)};
+function fsz(d){R.fs=Math.min(1.6,Math.max(.9,R.fs+d));document.documentElement.style.setProperty('--rfs',R.fs+'rem')}
+$('#rMinus').onclick=()=>fsz(-.1);$('#rPlus').onclick=()=>fsz(.1);
+$('#rRe').onclick=()=>{if(R.ch&&confirm('Vedabase থেকে নতুন করে এনে অনুবাদ করা হবে। এতে সময় লাগবে। করবেন?'))openChapter(R.ch,true)};
+
+async function openChapter(n,force){
+ const token=++R.token;R.ch=n;R.items=[];
+ const c=BG_CH[n-1],h=hueOf(n);
+ $('#rTtl').textContent=`অধ্যায় ${bnum(n)} · ${c}`;
+ $('#rHero').style.setProperty('--rc1',`hsl(${h} 75% 45%)`);$('#rHero').style.setProperty('--rc2',`hsl(${(h+45)%360} 70% 38%)`);
+ $('#rHero').innerHTML=`<small>${BK.bg.t}</small><h2>অধ্যায় ${bnum(n)}: ${c}</h2><p>${bnum(BG_COUNT[n-1])} শ্লোক · শ্লোক ও অনুবাদ: ইসকনের বাংলা গীতা</p>`;
+ $('#rVerses').innerHTML=`<div class="vw"><div class="spin"></div><span>অধ্যায় প্রস্তুত করা হচ্ছে...</span></div>`;
+ $('#rFoot').innerHTML='';setProg(0,1);
+ showReader(true);
+ try{
+  if(!force){
+   let cached=null;try{cached=await gs('loadChapter','bg',n)}catch(e){}
+   if(token!==R.token)return;
+   if(cached){
+    try{const arr=JSON.parse(cached);if(Array.isArray(arr)&&arr.length){
+     R.items=arr.map(d=>({label:d.label,data:d,status:'ok'}));drawAll();setProg(1,1);footer(true);return}}catch(e){}
+   }
+  }
+  let blog=null;try{blog=await gs('getBlogChapter',n)}catch(e){blog=null}
+  if(token!==R.token)return;
+  if(blog&&blog.length){
+   R.notice='';
+   R.items=blog.map(b=>({label:b.label,b:b,status:'wait'}));
+  }else{
+   R.notice='বাংলা গীতার ব্লগ থেকে এই অধ্যায় পাওয়া যায়নি, তাই শ্লোক ও অনুবাদ যন্ত্র-অনুবাদে দেখানো হচ্ছে।';
+   const labels=await gs('getChapterVerses','bg',n);
+   if(token!==R.token)return;
+   R.items=labels.map(l=>({label:l,status:'wait'}));
+  }
+  drawAll();setProg(0,R.items.length);footer(false);
+  await runPool(token);
+  if(token!==R.token)return;
+  await finish();
+ }catch(e){
+  if(token!==R.token)return;
+  $('#rVerses').innerHTML=`<div class="ve"><span>${esc(errMsg(e))}</span><button onclick="openChapter(${n},true)">আবার চেষ্টা করুন</button></div>`;
+ }
+}
+async function runPool(token){
+ let next=0;
+ const worker=async()=>{while(next<R.items.length&&token===R.token){await fetchOne(next++,token)}};
+ await Promise.all([worker(),worker(),worker()]);
+}
+async function fetchOne(i,token){
+ const it=R.items[i];it.status='load';paint(i);
+ for(let t=0;t<2&&token===R.token;t++){
+  try{
+   let d;
+   if(it.b){
+    try{d=await gs('getVerseExtra',R.ch,it.label)}
+    catch(e){d={ref:'BG '+R.ch+'.'+it.label,url:'',en:{dev:'',vt:'',syn:'',tr:'',pu:''},bn:{syn:'',pu:''},note:'শব্দার্থ ও তাৎপর্য আনা যায়নি।',partial:1}}
+    d.sa=it.b.sa;d.speaker=it.b.speaker;d.bn.tr=it.b.tr;d.src='blog';
+   }else{
+    d=await gs('getVerse','bg','',R.ch,it.label,true);
+   }
+   if(token!==R.token)return;
+   d.label=it.label;it.data=d;it.status='ok';it.err='';break;
+  }catch(e){it.status='err';it.err=errMsg(e)}
+ }
+ if(token!==R.token)return;
+ paint(i);prog();
+}
+function prog(){const d=R.items.filter(x=>x.status==='ok'||x.status==='err').length;setProg(d,R.items.length)}
+function setProg(a,b){$('#rProg').style.width=(b?Math.round(a*100/b):0)+'%'}
+async function finish(){
+ footer(true);
+ await save();
+}
+const complete=()=>R.items.every(x=>x.status==='ok'&&!x.data.partial);
+async function save(){if(complete()){try{await gs('saveChapter','bg',R.ch,JSON.stringify(R.items.map(x=>x.data)))}catch(e){}}}
+window.retry=async i=>{const t=R.token;await fetchOne(i,t);await save()};
+function footer(done){
+ const n=R.ch;
+ $('#rFoot').innerHTML=done?`<button class="alt" onclick="$('#rBack').click()">← সূচিপত্র</button>${n>1?`<button class="alt" onclick="openChapter(${n-1})">‹ আগের অধ্যায়</button>`:''}${n<18?`<button onclick="openChapter(${n+1})">পরের অধ্যায় › (${bnum(n+1)})</button>`:''}`:'';
+}
+function drawAll(){$('#rVerses').innerHTML=(R.notice?`<div class="soon">${esc(R.notice)}</div>`:'')+R.items.map((_,i)=>vhtml(i)).join('')}
+function paint(i){const el=document.getElementById('v'+i);if(el)el.outerHTML=vhtml(i)}
+
+function secHtml(i,k,bn,en,E,B,d){
+ if(k==='dev'){
+  const sa=d&&d.sa?d.sa+' ॥ '+bnum(d.label)+' ॥':d2b(E);
+  if(!sa.trim())return'';
+  const spk=d&&d.speaker?`<div class="spk">${esc(d.speaker)}</div>`:'';
+  return`<section class="sec s-dev"><h3>${bn}</h3>${spk}<div class="txt dev">${esc(sa)}</div></section>`;
+ }
+ if(!E&&!B)return'';
+ if(k==='vt')return`<section class="sec s-vt"><h3>${bn}</h3><div class="txt vt">${esc(E)}</div></section>`;
+ const main=k==='tr'?' main':'';
+ return`<section class="sec s-${k}"><h3>${bn} <button class="cp" style="float:right" data-cp="${i}|${k}">কপি</button></h3>
+ <div class="txt${main}">${B?esc(B):'<span style="color:var(--mute)">অনুবাদ পাওয়া যায়নি</span>'}</div>
+ ${E?`<div class="txt en"><b>${en}:</b> ${esc(E)}</div>`:''}</section>`;
+}
+function vhtml(i){
+ const it=R.items[i],lab=it.label,id='v'+i,key=`note:bg:${R.ch}:${lab}`;
+ let body='';
+ if(it.status==='ok'){
+  const d=it.data;
+  body=SEC.map(([k,bn,en])=>secHtml(i,k,bn,en,d.en[k],d.bn[k],d)).join('')+(d.note?`<div class="soon" style="margin:12px 0 0">${esc(d.note)}</div>`:'')+
+  `<details class="mynote"><summary>✎ আমার নোট</summary><textarea data-note="${esc(key)}" placeholder="এখানে নিজের নোট লিখুন...">${esc(store.get(key)||'')}</textarea></details>`;
+ }else if(it.status==='err'){
+  body=`<div class="ve"><span>এই শ্লোকটি আনা যায়নি: ${esc(it.err)}</span><button onclick="retry(${i})">আবার চেষ্টা করুন</button></div>`;
+ }else{
+  body=`<div class="vw"><div class="spin"></div><span>${it.status==='load'?'আনা ও অনুবাদ হচ্ছে...':'অপেক্ষায় আছে...'}</span></div>`;
+ }
+ const ref=it.data&&it.data.ref?it.data.ref:`BG ${R.ch}.${lab}`;
+ const link=it.data&&it.data.url?`<a href="${esc(it.data.url)}" target="_blank" rel="noopener" style="color:var(--accent);font-size:.85rem">Vedabase</a>`:'';
+ return`<article class="verse" id="${id}"><div class="vh"><span class="n">শ্লোক ${bnum(lab)}</span><span class="sp">${esc(ref)}</span>${link}${it.status==='ok'&&it.data.partial?`<button class="cp" onclick="retry(${i})">↻ শব্দার্থ-তাৎপর্য আবার আনুন</button>`:''}${it.status==='ok'?`<button class="cp" data-cp="${i}|all">সম্পূর্ণ কপি</button>`:''}</div><div class="vb">${body}</div></article>`;
+}
+function copyText(i,k){
+ const d=R.items[i].data;if(!d)return'';
+ if(k!=='all')return d.bn[k]||'';
+ return[`শ্লোক ${bnum(d.label)}`,d.sa||d2b(d.en.dev),d.en.vt,d.bn.syn&&'শব্দার্থ:\n'+d.bn.syn,d.bn.tr&&'অনুবাদ:\n'+d.bn.tr,d.bn.pu&&'তাৎপর্য:\n'+d.bn.pu].filter(Boolean).join('\n\n');
+}
+$('#rVerses').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(!b)return;const[i,k]=b.dataset.cp.split('|');copy(copyText(+i,k),b)});
+$('#rVerses').addEventListener('input',e=>{const t=e.target.closest('[data-note]');if(t)store.set(t.dataset.note,t.value)});
+
+/* ---------- খুঁজুন ---------- */
+let D=null;
+function pick(k){
+ book=k;const b=BK[k];
+ $('#chips').innerHTML=Object.keys(BK).map(x=>`<button class="chipb${x===k?' on':''}" data-k="${x}" style="--c:${BK[x].c};--c2:${BK[x].c2}">${BK[x].t}</button>`).join('');
+ $('#fPart').style.display=b.parts?'flex':'none';$('#fCh').style.display=b.nc?'none':'flex';
+ if(b.parts)$('#part').innerHTML=b.parts.map(p=>`<option value="${p[0]}">${p[1]}</option>`).join('');
+}
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('.chipb');if(b)pick(b.dataset.k)});
+function fail(m){$('#load').classList.remove('on');$('#go').disabled=false;const e=$('#msg');e.className='msg err';e.textContent=errMsg(m)}
+function run(){
+ $('#msg').className='msg';$('#out').classList.remove('on');$('#load').classList.add('on');$('#go').disabled=true;
+ gs('getVerse',book,$('#part').value,$('#ch').value,$('#vs').value,$('#syn').checked).then(show,fail)}
+$('#go').onclick=run;
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('.form'))run()});
+function show(d){
+ D=d;$('#load').classList.remove('on');$('#go').disabled=false;
+ const rows=SEC.map(([k,bn,en])=>{
+  const E=d.en[k],B=d.bn[k];if(!E)return'';
+  if(k==='dev')return`<section class="sec s-dev"><h3>${bn}</h3><div class="col"><h4><span></span><button class="cp" data-c="dev|bn">কপি</button></h4><div class="txt dev" style="text-align:center">${esc(d2b(E))}</div></div></section>`;
+  if(k==='vt')return`<section class="sec s-vt"><h3>${bn}</h3><div class="col"><h4><span></span><button class="cp" data-c="vt|en">কপি</button></h4><div class="txt vt" style="text-align:center">${esc(E)}</div></div></section>`;
+  return`<section class="sec s-${k}"><h3>${bn} · ${en}</h3><div class="cols"><div class="col"><h4><span>English</span><button class="cp" data-c="${k}|en">কপি</button></h4><div class="txt en">${esc(E)}</div></div><div class="col"><h4><span>বাংলা</span>${B?`<button class="cp" data-c="${k}|bn">কপি</button>`:''}</h4><div class="txt">${B?esc(B):'<span style="color:var(--mute)">অনুবাদ করা হয়নি (শব্দার্থের বাক্স টিক দিয়ে আবার চেষ্টা করুন)</span>'}</div></div></div></section>`}).join('');
+ const m=/^(\d+)(?:-(\d+))?$/.exec($('#vs').value.trim().replace(/[০-৯]/g,x=>'০১২৩৪৫৬৭৮৯'.indexOf(x)))||[0,1];
+ const s=+m[1],e=+(m[2]||m[1]);
+ $('#out').innerHTML=`<div class="top"><h2>${esc(d.ref)}</h2><a href="${esc(d.url)}" target="_blank" rel="noopener">Vedabase-এ দেখুন</a></div>${rows}
+ <div class="nav2"><button id="pv" ${s<2?'disabled':''}>‹ আগের শ্লোক</button><button id="nx">পরের শ্লোক ›</button><button class="all cp" data-c="all|bn">সম্পূর্ণ বাংলা কপি</button></div>
+ <p class="note">এটি যন্ত্রের করা অনুবাদ। শাস্ত্রীয় শব্দের অর্থ ঠিক আছে কি না, নিজের Doc-এ বসানোর আগে একবার মিলিয়ে নিন।</p>`;
+ $('#out').classList.add('on');
+ $('#pv').onclick=()=>{$('#vs').value=s-1;run()};
+ $('#nx').onclick=()=>{$('#vs').value=e+1;run()};
+ scrollTo({top:document.querySelector('.form').offsetTop-80,behavior:'smooth'});
+}
+function textFor(c){
+ const [k,l]=c.split('|');
+ if(k==='dev')return d2b(D.en.dev);
+ if(k!=='all')return D[l][k]||'';
+ return [D.ref,d2b(D.en.dev),D.en.vt,D.bn.syn&&'শব্দার্থ:\n'+D.bn.syn,'অনুবাদ:\n'+D.bn.tr,D.bn.pu&&'তাৎপর্য:\n'+D.bn.pu].filter(Boolean).join('\n\n')}
+function copy(t,btn){
+ const ok=()=>{const o=btn.textContent;btn.textContent='কপি হয়েছে ✓';btn.classList.add('done');setTimeout(()=>{btn.textContent=o;btn.classList.remove('done')},1600)};
+ const fb=()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){}a.remove()};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb()}
+$('#out').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b&&D)copy(textFor(b.dataset.c),b)});
+
+pick('bg');go('home');
+</script>
+</body>
+</html>
