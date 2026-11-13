@@ -244,7 +244,7 @@ footer{color:var(--mute);text-align:center;font-size:.88rem;padding:26px 18px 50
  <div id="out"></div>
 </div></main>
 
-<footer>অনুবাদ যন্ত্রের করা। শাস্ত্রীয় শব্দের অর্থ নিজের ছাপা গ্রন্থের সঙ্গে মিলিয়ে নিন। মূল লেখা: vedabase.io</footer>
+<footer><div id="stat" style="margin-bottom:8px"></div>অনুবাদ যন্ত্রের করা। শাস্ত্রীয় শব্দের অর্থ নিজের ছাপা গ্রন্থের সঙ্গে মিলিয়ে নিন। মূল লেখা: vedabase.io</footer>
 </div>
 
 <!-- ======== অধ্যায় পড়ার পাতা ======== -->
@@ -296,14 +296,26 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const bnum=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
 const HAS_GS=typeof google!=='undefined'&&google.script&&google.script.run;
-async function api(fn,a){
+const NETERR='সার্ভারে পৌঁছানো যায়নি। ইন্টারনেট ঠিক আছে কি না দেখুন। ঠিক থাকলে Apps Script-এ নতুন Version Deploy হয়েছে কি না যাচাই করুন।';
+const OLDERR='Apps Script থেকে সঠিক উত্তর আসেনি। সম্ভবত Code.gs-এর নতুন Version এখনো Deploy হয়নি, বা authorize() চালিয়ে অনুমতি দেওয়া হয়নি।';
+async function apiOnce(fn,a){
  if(!API_URL)throw new Error('API_URL বসানো হয়নি।');
  let r;
- if(fn==='saveChapter')r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:fn,args:a})});
- else r=await fetch(API_URL+'?fn='+encodeURIComponent(fn)+'&args='+encodeURIComponent(JSON.stringify(a)));
- let j;try{j=await r.json()}catch(e){throw new Error('সার্ভার থেকে উত্তর পাওয়া যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।')}
+ try{
+  if(fn==='saveChapter')r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:fn,args:a})});
+  else r=await fetch(API_URL+'?fn='+encodeURIComponent(fn)+'&args='+encodeURIComponent(JSON.stringify(a)));
+ }catch(e){const x=new Error(NETERR);x.net=true;throw x}
+ let j;try{j=await r.json()}catch(e){const x=new Error(OLDERR);x.net=true;throw x}
  if(!j.ok)throw new Error(j.error||'কিছু একটা সমস্যা হয়েছে।');
  return j.data;
+}
+async function api(fn,a){
+ let last;
+ for(let t=0;t<3;t++){
+  try{return await apiOnce(fn,a)}
+  catch(e){last=e;if(!e.net)throw e;await new Promise(r=>setTimeout(r,t?4000:1500))}
+ }
+ throw last;
 }
 const gs=(fn,...a)=>HAS_GS?new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(rej)[fn](...a)):api(fn,a);
 const errMsg=m=>m&&m.message?m.message.replace(/^Error:\s*/,''):'কিছু একটা সমস্যা হয়েছে, আবার চেষ্টা করুন।';
@@ -416,7 +428,7 @@ async function openChapter(n,force){
 async function runPool(token){
  let next=0;
  const worker=async()=>{while(next<R.items.length&&token===R.token){await fetchOne(next++,token)}};
- await Promise.all([worker(),worker(),worker()]);
+ await Promise.all([worker(),worker()]);
 }
 async function fetchOne(i,token){
  const it=R.items[i];it.status='load';paint(i);
@@ -535,6 +547,7 @@ function copy(t,btn){
 $('#out').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b&&D)copy(textFor(b.dataset.c),b)});
 
 pick('bg');go('home');
+gs('ping').then(r=>{$('#stat').innerHTML='<span style="color:var(--ok)">● সার্ভারের সঙ্গে সংযোগ ঠিক আছে</span>'},e=>{$('#stat').innerHTML='<span style="color:var(--err)">● '+esc(errMsg(e))+'</span>'});
 </script>
 </body>
 </html>
